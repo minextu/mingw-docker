@@ -1,4 +1,4 @@
-FROM minextu/mingw:latest
+FROM minextu/mingw-arch:latest
 MAINTAINER minextu
 
 #
