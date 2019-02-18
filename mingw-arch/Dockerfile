@@ -1,12 +1,12 @@
-FROM base/devel:latest
+FROM archlinux/base
 MAINTAINER minextu
 
 # install build tools
-RUN pacman --noconfirm --needed -Sy \
+RUN pacman --noconfirm --needed -Syu \
         cmake                 \
         git                   \
-        wget               && \
-    find /var/cache/pacman/pkg -mindepth 1 -delete
+        base-devel            \
+        wget
 
 #
 # AUR preparations
@@ -38,35 +38,35 @@ RUN cd /tmp && \
 # mingw-w64-binutils
 RUN yaourt -S --noconfirm --m-arg --nocheck --m-arg --skippgpcheck    \
         mingw-w64-binutils                                         && \
-    rm -r /tmp/* && sudo find /var/cache/pacman/pkg -mindepth 1 -delete
+    rm -r /tmp/*
 
 # mingw-w64-headers
 RUN yaourt -S  --noconfirm --m-arg --nocheck --m-arg --skippgpcheck    \
         mingw-w64-headers mingw-w64-headers-bootstrap               && \
-    rm -r /tmp/* && sudo find /var/cache/pacman/pkg -mindepth 1 -delete
+    rm -r /tmp/*
 
 # mingw-w64-gcc-base
 RUN yaourt -S --noconfirm --m-arg --nocheck --m-arg --skippgpcheck    \
          mingw-w64-gcc-base                                        && \
-    rm -r /tmp/* && sudo find /var/cache/pacman/pkg -mindepth 1 -delete
+    rm -r /tmp/*
 
 # mingw-w64-crt
 RUN yaourt -S --noconfirm --m-arg --nocheck --m-arg --skippgpcheck    \
         mingw-w64-crt                                              && \
-    rm -r /tmp/* && sudo find /var/cache/pacman/pkg -mindepth 1 -delete
+    rm -r /tmp/*
 
 # mingw-w64-winpthreads (mingw-w64-headers-bootstrap is conflicting)
 RUN sudo pacman -Rdd --noconfirm mingw-w64-headers-bootstrap       && \
     yaourt -S --noconfirm --m-arg --nocheck --m-arg --skippgpcheck    \
         mingw-w64-winpthreads                                      && \
-    rm -r /tmp/* && sudo find /var/cache/pacman/pkg -mindepth 1 -delete
+    rm -r /tmp/*
 
 # mingw-w64-gcc (mingw-w64-gcc-base is conflicting)
 RUN sudo pacman -Rdd --noconfirm mingw-w64-gcc-base                && \
     yaourt -S --noconfirm --m-arg --nocheck --m-arg --skippgpcheck    \            
         mingw-w64-gcc                                              && \
     sudo pacman -Rs --noconfirm gcc-ada                            && \
-    rm -r /tmp/* && sudo find /var/cache/pacman/pkg -mindepth 1 -delete
+    rm -r /tmp/*
 
 USER root
 CMD /bin/bash
